@@ -1,5 +1,6 @@
 <?php
 
+// 新しいパスワード
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;

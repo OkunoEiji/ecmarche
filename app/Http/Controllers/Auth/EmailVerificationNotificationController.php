@@ -1,5 +1,6 @@
 <?php
 
+// メール検証通知
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
