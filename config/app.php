@@ -168,6 +168,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        // サービスコンテナにSampleServiceProviderが登録され、使えるようになる。
+        App\Providers\SampleServiceProvider::class,
     ])->toArray(),
 
     /*
