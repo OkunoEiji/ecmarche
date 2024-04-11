@@ -11,10 +11,14 @@ use App\Http\Controllers\Admin\Auth\PasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
+use App\Http\Controllers\Admin\OwnersController;
 
 Route::get('/', function () {
     return view('admin.welcome');
 });
+
+Route::resource('owners', OwnersController::class)
+->middleware(['auth:admin', 'verified']);
 
 // Laravel Breezeのインストールで、'dashboard'のURLが追加される
 Route::get('/dashboard', function () {
