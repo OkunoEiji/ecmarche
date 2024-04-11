@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Owner; // Eloquent（エロクアント）
 use Illuminate\Support\Facades\DB; // QeryBuilder クエリビルダ
 use Carbon\Carbon;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 
 class OwnersController extends Controller
 {
@@ -53,9 +55,25 @@ class OwnersController extends Controller
         return view('admin.owners.create');
     }
 
+    // Requestは、formで入力された内容がRequestクラスになり、インスタンス化する
     public function store(Request $request)
     {
-        //
+        // $request->name;
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.Owner::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        Owner::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()
+        ->route('admin.owners.index')
+        ->with('message', 'オーナーを登録致しました。');
     }
 
     public function show(string $id)
