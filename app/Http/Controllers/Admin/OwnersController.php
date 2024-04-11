@@ -73,7 +73,8 @@ class OwnersController extends Controller
 
         return redirect()
         ->route('admin.owners.index')
-        ->with('message', 'オーナーを登録致しました。');
+        ->with(['message'=>'オーナーを登録致しました。',
+        'status'=>'info']);
     }
 
     public function show(string $id)
@@ -99,11 +100,33 @@ class OwnersController extends Controller
 
         return redirect()
         ->route('admin.owners.index')
-        ->with('message', 'オーナー情報を更新致しました。');
+        ->with(['message'=>'オーナー情報を更新致しました。',
+        'status'=>'info']);
     }
 
     public function destroy(string $id)
     {
-        //
+        Owner::findOrFail($id)->delete(); //ソフトデリート
+
+        return redirect()
+        ->route('admin.owners.index')
+        ->with(['message'=>'オーナーを削除致しました。',
+        'status'=>'alert']);
+    }
+
+    public function expiredOwnerIndex()
+    {
+        // onlyTrashedで、Ownerのソフトデリートしたものだけを取り出す
+        $expiredOwners = Owner::onlyTrashed()->get();
+
+        return view('admin.expired-owners',
+        compact('expiredOwners'));
+    }
+
+    public function expiredOwnerDestroy($id)
+    {
+        Owner::onlyTrashed()->findOrFail($id)->forceDelete();
+
+        return redirect()->route('admin.expired-owners.index');
     }
 }
