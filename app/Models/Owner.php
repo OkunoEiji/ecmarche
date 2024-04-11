@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 // 認証機能を付ける
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Shop;
 
 // Authenticatableを継承させる
 class Owner extends Authenticatable
@@ -30,4 +31,10 @@ class Owner extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function shop()
+    {
+        // リレーション1対1
+        return $this->hasOne(Shop::class);
+    }
 }
