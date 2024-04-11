@@ -44,7 +44,9 @@ class OwnersController extends Controller
         // echo $date_now->year;
         // echo $date_parse;
 
-        $owners = Owner::select('id', 'name', 'email', 'created_at')->get();
+        $owners = Owner::select('id', 'name', 'email', 'created_at')
+        ->paginate(3);
+        // ->get();
 
         return view('admin.owners.index',
         compact('owners'));
