@@ -13,12 +13,12 @@ use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use App\Http\Controllers\Admin\OwnersController;
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// });
 
 Route::resource('owners', OwnersController::class)
-->middleware(['auth:admin', 'verified']);
+->middleware(['auth:admin', 'verified'])->except(['show']);
 
 Route::prefix('expired-owners')->middleware('auth:admin')->group(function(){
     Route::get('index', [OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
