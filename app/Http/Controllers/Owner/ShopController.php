@@ -13,6 +13,7 @@ class ShopController extends Controller
     {
         $this->middleware('auth:owners');
 
+        // 他のショップの情報（ログインしている人以外）を見ることを制限
         $this->middleware(function($request, $next){
             // dd($request->route()->parameter('shop.index')); // 数字でなく、文字列で取得
             // dd(Auth::id()); // 文字列でなく、数字で取得
@@ -33,9 +34,9 @@ class ShopController extends Controller
     public function index()
     {
         // ログインしているオーナーidを取得
-        $ownerId = Auth::id();
+        // $ownerId = Auth::id();
         // 取得したログインIDから、Shopモデルを検索
-        $shops = Shop::where('owner_id', $ownerId)->get();
+        $shops = Shop::where('owner_id', Auth::id())->get();
         // 取得した変数をビューに渡す
         return view('owner.shops.index',
         compact('shops'));
