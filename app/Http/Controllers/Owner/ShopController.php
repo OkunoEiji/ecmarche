@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
@@ -44,10 +45,18 @@ class ShopController extends Controller
 
     public function edit(string $id)
     {
-        dd(Shop::findOrFail($id));
+        $shop = Shop::findOrFail($id);
+        // dd(Shop::findOrFail($id));
+        return view('owner.shops.edit', compact('shop'));
     }
 
     public function update(Request $request, string $id)
     {
+        $imageFile = $request->image; // リクエストのimageをimageFileという変数に入れる
+        if(!is_null($imageFile) && $imageFile->isValid()){ // null判定で選ばれている&念のためアップロードできているかの確認
+            Storage::putFile('public/shops', $imageFile); //storageのapp/publicにshopsフォルダを作成し、ファイル名を作り保存
+        }
+
+        return redirect()->route('owner.shops.index');
     }
 }
