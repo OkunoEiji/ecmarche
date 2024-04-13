@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UploadImageRequest;
 
 class ImageController extends Controller
 {
@@ -30,8 +31,7 @@ class ImageController extends Controller
 
     public function index()
     {
-        // ログインしているオーナーidを取得
-        // 取得したログインIDから、Shopモデルを検索
+        // ログインしているオーナーidでImageモデルを検索
         $images = Image::where('owner_id', Auth::id())
         ->orderBy('updated_at', 'desc') // 更新頻度が新しい順で表示
         ->paginate(20); // 20件ずつ表示
@@ -42,12 +42,12 @@ class ImageController extends Controller
 
     public function create()
     {
-        //
+        return view('owner.images.create');
     }
 
-    public function store(Request $request)
+    public function store(UploadImageRequest $request)
     {
-        //
+        dd($request);
     }
 
     public function show(string $id)

@@ -1,7 +1,9 @@
 @php
+// shopsならstorage/shops/に保存
 if($type === 'shops'){
     $path = 'storage/shops/';
 }
+// productsならstorage/products/に保存
 if($type === 'products'){
     $path = 'storage/products/';
 }
