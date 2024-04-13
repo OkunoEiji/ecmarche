@@ -9,6 +9,7 @@ use App\Models\Shop;
 use Illuminate\Support\Facades\Storage;
 use InterventionImage;
 use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
 
 class ShopController extends Controller
 {
@@ -57,14 +58,15 @@ class ShopController extends Controller
     {
         $imageFile = $request->image; // リクエストのimageをimageFileという変数に入れる
         if(!is_null($imageFile) && $imageFile->isValid()){ // null判定で選ばれている&念のためアップロードできているかの確認
-            // Storage::putFile('public/shops', $imageFile); //storageのapp/publicにshopsフォルダを作成し、ファイル名を作り保存（リサイズなしの場合）
-            $fileName = uniqid(rand().'_'); // ランダムなファイル名にする
-            $extension = $imageFile->extension(); // アップロードされたimageFileの拡張子を取得
-            $fileNameToStore = $fileName. '.' .$extension; // ファイル名と拡張子を付けて、変数に入れる
-            $resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode(); // アップロードされた画像をInterventionのmakeに入れ、リサイズする
-            // dd($imageFile ,$resizedImage);
+            $fileNameToStore = ImageService::upload($imageFile, 'shops');
+            // // Storage::putFile('public/shops', $imageFile); //storageのapp/publicにshopsフォルダを作成し、ファイル名を作り保存（リサイズなしの場合）
+            // $fileName = uniqid(rand().'_'); // ランダムなファイル名にする
+            // $extension = $imageFile->extension(); // アップロードされたimageFileの拡張子を取得
+            // $fileNameToStore = $fileName. '.' .$extension; // ファイル名と拡張子を付けて、変数に入れる
+            // $resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode(); // アップロードされた画像をInterventionのmakeに入れ、リサイズする
+            // // dd($imageFile ,$resizedImage);
 
-            Storage::put('public/shops/' .$fileNameToStore, $resizedImage); // 第1引数がフォルダからのファイル名、第2引数がリサイズした画像
+            // Storage::put('public/shops/' .$fileNameToStore, $resizedImage); // 第1引数がフォルダからのファイル名、第2引数がリサイズした画像
         }
 
         return redirect()->route('owner.shops.index');
