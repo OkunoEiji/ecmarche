@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Shop;
+use App\Models\Image;
 
 // Authenticatableを継承させる
 class Owner extends Authenticatable
@@ -36,5 +37,11 @@ class Owner extends Authenticatable
     {
         // リレーション1対1
         return $this->hasOne(Shop::class);
+    }
+
+    public function image()
+    {
+        // リレーション1対多
+        return $this->hasMany(Image::class);
     }
 }

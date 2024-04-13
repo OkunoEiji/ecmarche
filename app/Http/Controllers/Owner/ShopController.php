@@ -81,10 +81,11 @@ class ShopController extends Controller
         $shop->name = $request->name;
         $shop->information = $request->information;
         $shop->is_selling = $request->is_selling;
+        //　ファイルをアップしない場合もあるので、空ではない場合の条件をつける。$fileNameToStoreを張り付ける。
         if(!is_null($imageFile) && $imageFile->isValid()){
             $shop->filename = $fileNameToStore;
         }
-
+        // 保存
         $shop->save();
 
         return redirect()
