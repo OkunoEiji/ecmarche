@@ -48,10 +48,14 @@ class ImageController extends Controller
 
     public function store(UploadImageRequest $request)
     {
+        // 複数の画像を配列で取得
         $imageFiles = $request->file('files');
+        // 一応、null判定する
         if(!is_null($imageFiles)){
             foreach($imageFiles as $imageFile){
+                // 第2引数は保存先'products'
                 $fileNameToStore = ImageService::upload($imageFile, 'products');
+                // 保存する
                 Image::create([
                     'owner_id' => Auth::id(),
                     'filename' => $fileNameToStore
@@ -65,19 +69,26 @@ class ImageController extends Controller
         'status'=>'info']);
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function edit(string $id)
     {
-        //
+        $image = Image::findOrFail($id);
+        return view('owner.images.edit', compact('image'));
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => ['string', 'max:50'],
+        ]);
+
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+        $image->save();
+
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message'=>'画像情報を更新致しました。',
+        'status'=>'info']);
     }
 
     public function destroy(string $id)

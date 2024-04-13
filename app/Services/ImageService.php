@@ -11,6 +11,7 @@ class ImageService
     public static function upload($imageFile, $folderName)
     {
         // dd($imageFile['image']);
+        // 取得した内容が配列かの確認
         if(is_array($imageFile))
         {
             $file = $imageFile['image'];

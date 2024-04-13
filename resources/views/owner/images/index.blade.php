@@ -15,13 +15,13 @@
                   </div>
                     <div class="flex flex-wrap">
                     @foreach($images as $image)
-                        <div class="w-1/4 p-4">
+                        <div class="w-1/4 p-2 md:p-4">
                         {{-- クリックしたら、edit画面にshopのidが入る --}}
                         <a href="{{ route('owner.images.edit', ['image'=>$image->id]) }}">
-                        <div class="border rounded-md p-4">
-                            <div class="text-xl">{{ $image->name }}</div>
+                        <div class="border rounded-md p-2 md:p-4">
                             {{-- productsの中に画像を保管 --}}
                             <x-thumbnail :filename="$image->filename" type="products" />
+                            <div class="text-gray-700 ">{{ $image->title }}</div>
                         </div>
                         </a>
                         </div>
