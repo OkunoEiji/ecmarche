@@ -56,6 +56,14 @@ class ShopController extends Controller
     // 引数をUploadImageRequestに置き換え、バリデーションが使用可能。
     public function update(UploadImageRequest $request, string $id)
     {
+        // 店名、店舗情報、販売中か停止中かはこちらでバリデーションをかける。
+        $request->validate([
+            'name' => ['required', 'string', 'max:50'],
+            'information' => ['required', 'string', 'max:1000'],
+            'is_selling' => ['required'],
+        ]);
+
+        // 画像ファイルに関しては、フォームリクエストでバリデーションをかける。
         $imageFile = $request->image; // リクエストのimageをimageFileという変数に入れる
         if(!is_null($imageFile) && $imageFile->isValid()){ // null判定で選ばれている&念のためアップロードできているかの確認
             $fileNameToStore = ImageService::upload($imageFile, 'shops');
@@ -69,6 +77,19 @@ class ShopController extends Controller
             // Storage::put('public/shops/' .$fileNameToStore, $resizedImage); // 第1引数がフォルダからのファイル名、第2引数がリサイズした画像
         }
 
-        return redirect()->route('owner.shops.index');
+        $shop = Shop::findOrFail($id);
+        $shop->name = $request->name;
+        $shop->information = $request->information;
+        $shop->is_selling = $request->is_selling;
+        if(!is_null($imageFile) && $imageFile->isValid()){
+            $shop->filename = $fileNameToStore;
+        }
+
+        $shop->save();
+
+        return redirect()
+        ->route('owner.shops.index')
+        ->with(['message'=>'店舗情報を更新致しました。',
+        'status'=>'info']);
     }
 }
