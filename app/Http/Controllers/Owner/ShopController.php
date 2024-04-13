@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
 use Illuminate\Support\Facades\Storage;
 use InterventionImage;
+use App\Http\Requests\UploadImageRequest;
 
 class ShopController extends Controller
 {
@@ -51,7 +52,8 @@ class ShopController extends Controller
         return view('owner.shops.edit', compact('shop'));
     }
 
-    public function update(Request $request, string $id,)
+    // 引数をUploadImageRequestに置き換え、バリデーションが使用可能。
+    public function update(UploadImageRequest $request, string $id)
     {
         $imageFile = $request->image; // リクエストのimageをimageFileという変数に入れる
         if(!is_null($imageFile) && $imageFile->isValid()){ // null判定で選ばれている&念のためアップロードできているかの確認

@@ -17,7 +17,7 @@
                             </h1>
                           </div>
                           <div class="lg:w-1/2 md:w-2/3 mx-auto">
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('name', 'email')" class="mb-4" />
                             <form method="post" action="{{ route('admin.owners.update', ['owner'=>$owner->id]) }}">
                                 @method('PUT')
                                 @csrf
