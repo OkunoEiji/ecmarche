@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
+use App\Models\Stock;
 
 class Product extends Model
 {
@@ -28,5 +29,11 @@ class Product extends Model
     {
         // 第2引数にimage1のようにidを付けない場合、判断できないため、第3引数でidに姫づくことを書く
         return $this->belongsTo(Image::class, 'image1', 'id');
+    }
+
+    public function stock()
+    {
+        // リレーション1対多
+        return $this->hasMany(Stock::class);
     }
 }

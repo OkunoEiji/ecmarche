@@ -15,7 +15,7 @@
                   </div>
                     <div class="flex flex-wrap">
                     @foreach($ownerInfo as $owner)
-                        {{-- ownerInfoのproductの複数情報から1つずつ取り出す→ --}}
+                        {{-- ownerInfoのproductの複数情報から1つずつ取り出す→SQLが1まとめに --}}
                         @foreach($owner->shop->product as $product)
                         <div class="w-1/4 p-2 md:p-4">
                         {{-- クリックしたら、edit画面にproductのidが入る --}}
