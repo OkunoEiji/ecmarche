@@ -28,6 +28,6 @@ class Shop extends Model
     public function product()
     {
         // リレーション1対多
-        return $this->hasMny(Product::class);
+        return $this->hasMany(Product::class);
     }
 }

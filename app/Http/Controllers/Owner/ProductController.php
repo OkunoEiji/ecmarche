@@ -4,60 +4,78 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Image;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use App\Models\SecondaryCategory;
+use App\Models\Owner;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth:owners');
+
+        $this->middleware(function($request, $next){
+
+            $id = $request->route()->parameter('product');
+            if(!is_null($id)){
+                // ログインしているオーナーのproductかの判定、productにはowner情報がないため、shopでつなぐ
+                $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
+                $productId = (int)$productsOwnerId;
+                if($productId !== Auth::id()){
+                    abort(404);
+                }
+            }
+            return $next($request);
+        });
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index()
+    {
+        // ログインしているオーナーのproductを取得（N+1問題）
+        // ownerからshopからproductからimageFirstをまとめて取得する（条件：ログインしているオーナー）
+        $ownerInfo = Owner::with('shop.product.imageFirst')
+        ->where('id', Auth::id())->get();
+
+        // // dd($ownerInfo);
+        // foreach($ownerInfo as $owner){
+        //     // dd($owner->shop->product);
+        //     foreach($owner->shop->product as $product){
+        //         // dd($product->imageFirst->filename);
+        //     }
+        // }
+
+        // productsの情報を持って、indexにリダイレクト
+        return view('owner.products.index',
+        compact('ownerInfo'));
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

@@ -19,13 +19,14 @@ class Product extends Model
 
     public function category()
     {
-        // リレーション1対1
+        // 第2引数に外部キー、第3引数で親モデル名を設定
         return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
     }
 
+    // テーブル名にimage1があるため、imageFirstに変更
     public function imageFirst()
     {
-        // リレーション1対1
+        // 第2引数にimage1のようにidを付けない場合、判断できないため、第3引数でidに姫づくことを書く
         return $this->belongsTo(Image::class, 'image1', 'id');
     }
 }
