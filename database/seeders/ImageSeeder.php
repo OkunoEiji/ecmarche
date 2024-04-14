@@ -10,7 +10,7 @@ class ImageSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('shops')->insert([
+        DB::table('images')->insert([
             [
                 'owner_id' => 1,
                 'filename'=>'sample1.jpg',

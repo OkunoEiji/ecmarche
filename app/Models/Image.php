@@ -17,7 +17,7 @@ class Image extends Model
 
     public function owner()
     {
-        // リレーション1対1
+        // リレーション1対多
         return $this->belongsTo(Owner::class);
     }
 }
