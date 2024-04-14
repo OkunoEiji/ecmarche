@@ -94,13 +94,16 @@ class ImageController extends Controller
 
     public function destroy(string $id)
     {
+        // データベースを削除する前に、Storageフォルダの画像ファイルを削除する
+        // 画像ファイルのidを取得
         $image = Image::findOrFail($id);
+        // ファイルの在処を取得
         $filePath = 'public/products/' . $image->filename;
-
+        // フォルダにファイルがある場合、ファイルを削除する
         if(Storage::exists($filePath)){
             Storage::delete($filePath);
         }
-
+        // データベースから削除を行う。
         Image::findOrFail($id)->delete();
 
         return redirect()
