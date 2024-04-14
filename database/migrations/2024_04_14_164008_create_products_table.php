@@ -14,6 +14,13 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             // 親キーを削除したときに合わせて削除するか
             $table->id();
+            $table->string('name');
+            $table->text('information');
+            // 符号なしの数値、マイナス設定なし
+            $table->unsignedInteger('price');
+            $table->boolean('is_selling');
+            // 表示順は設定しない場合もあるため、nullable
+            $table->integer('sort_order')->nullable;
             // ownerを消したときに、shopの消えるので、productも消える
             $table->foreignId('shop_id')
             ->constrained()
@@ -23,6 +30,15 @@ return new class extends Migration
             ->constrained();
             // image1では、どのモデルかを判断できない。->constrained()で指定する。
             $table->foreignId('image1')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image2')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image3')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image4')
             ->nullable()
             ->constrained('images');
             $table->timestamps();
