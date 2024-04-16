@@ -14,6 +14,7 @@ use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 use Illuminate\Support\Facades\Log;
+use App\Http_Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -82,25 +83,11 @@ class ProductController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'information' => ['required', 'string', 'max:1000'],
-            'price' => ['required', 'integer'],
-            'sort_order' => ['nullable', 'integer'],
-            'quantity' => ['required', 'integer'],
-            'shop_id' => ['required', 'exists:shops,id'],
-            'category' => ['required', 'exists:secondary_categories,id'],
-            'image1' => ['nullable', 'exists:images,id'],
-            'image2' => ['nullable', 'exists:images,id'],
-            'image3' => ['nullable', 'exists:images,id'],
-            'image4' => ['nullable', 'exists:images,id'],
-            'is_selling' => ['required'],
-        ]);
-
         try {
             DB::transaction(function () use ($request) {
+                // 作成した情報を$productの変数に入れる
                 $product = Product::create([
                     'name' => $request->name,
                     'information' => $request->information,
@@ -128,36 +115,53 @@ class ProductController extends Controller
 
         return redirect()
             ->route('owner.products.index')
-            ->with(['message' => '商品登登録を致しました。',
+            ->with(['message' => '商品登録を致しました。',
             'status' => 'info'
             ]);
     }
 
     public function edit(string $id)
     {
+        // 1つのproductを指定する
         $product = Product::findOrFail($id);
+        // whereでidを絞り込み、数量の合計を$quantityに入れる
         $quantity = Stock::where('product_id', $product->id)
         ->sum('quantity');
-
+        // ログインオーナーから、Shopのid、nameを取得
         $shops = Shop::where('owner_id', Auth::id())
         ->select('id', 'name')
         ->get();
-
+        // ログインオーナーから、Imageのid、title、filenameを取得
         $images = Image::where('owner_id', Auth::id())
         ->select('id', 'title', 'filename')
         ->orderBy('updated_at', 'desc')
         ->get();
-
+        // PrimaryCategoryからカテゴリーを取得
         $categories = PrimaryCategory::with('secondary')
         ->get();
-
+        // 5つの変数を持って、ビューに渡す
         return view('owner.products.edit',
         compact('product', 'quantity', 'shops', 'images', 'categories'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        $request->validate([
+            'current_quantity' => ['required', 'integer'],
+        ]);
+
+        $product = Product::findOrFail($id);
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        if($request->current_quantity !== $quantity){
+            $id = $request->route()->parameter('product');
+            return redirect()->route('owner.products.edit', ['product'=>$id])
+            ->with(['message' => '在庫数が変更されております。再度、ご確認ください。',
+            'status' => 'alert']);
+        } else {
+            
+        }
     }
 
     public function destroy(string $id)

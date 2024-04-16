@@ -21,7 +21,7 @@
                         {{-- クリックしたら、edit画面にproductのidが入る --}}
                         <a href="{{ route('owner.products.edit', ['product'=>$product->id]) }}">
                         <div class="border rounded-md p-2 md:p-4">
-                            {{-- productの中にfilenameはないため、間にimageFirst --}}
+                            {{-- productの中にfilenameはないため、間にimageFirst。?? ''でnullの場合は空の文字列が入るため、:なし --}}
                             <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
                             <div class="text-gray-700 ">{{ $product->name }}</div>
                         </div>

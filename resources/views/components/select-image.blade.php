@@ -4,6 +4,7 @@
     if($name === 'image3'){ $modal = 'modal-3'; }
     if($name === 'image4'){ $modal = 'modal-4'; }
     if($name === 'image5'){ $modal = 'modal-5'; }
+    // 新規登録時に値がないので、値の有無を確認
     $cImage = $currentImage ?? '';
     $cId = $currentId ?? '';
 @endphp
@@ -43,6 +44,7 @@
 <div class="flex justify-around items-center mb-4">
     <a class="py-2 px-4 bg-gray-200" data-micromodal-trigger="{{ $modal }}" href='javascript:;'>ファイルを選択して下さい。</a>
     <div class="w-1/4">
+        {{-- 画像のファイル名があれば表示、なければ空を設定 --}}
         <img id="{{ $name }}_thumbnail" @if($cImage) src="{{ asset('storage/products/' . $cImage)}}" @else src="" @endif>
     </div>
 </div>

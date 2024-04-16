@@ -62,7 +62,7 @@ class Product extends Model
 
     public function stock()
     {
-        // リレーション1対多
+        // リレーション1対多(多側)
         return $this->hasMany(Stock::class);
     }
 }

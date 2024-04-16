@@ -10,8 +10,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <x-input-error :messages="$errors->get('image')" class="mb-4" />
+                    <x-flash-message status="session('status')" />
                     <form method="post" action="{{ route('owner.products.update', ['product' => $product->id]) }}">
                         @csrf
+                        @method('PUT')
                         <div class="-m-2">
                           <div class="p-2 w-1/2 mx-auto">
                             <div class="relative">
@@ -42,7 +44,7 @@
                             <div class="relative">
                               <label for="current_quantity" class="leading-7 text-sm text-gray-600">現在の在庫</label>
                               <input type="hidden" id="current_quantity" name="current_quantity" value="{{ $quantity }}">
-                              <div class="w-full bg-gray-100 bg-opacity-50 rounded">{{ $quantity }}</div>
+                              <div class="w-full bg-gray-100 bg-opacity-50 rounded text-base outline-none text-gray-700 py-1 px-3 leading-8">{{ $quantity }}</div>
                             </div>
                           </div>
                           <div class="p-2 w-1/2 mx-auto">
@@ -63,6 +65,7 @@
                               <label for="shop_id" class="leading-7 text-sm text-gray-600">販売店舗</label>
                               <select name="shop_id" id="shop_id" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                               @foreach($shops as $shop)
+                                {{-- shopのidがコントローラのproductから渡るshop_idが同じなら、selectedで保持する --}}
                                 <option value="{{ $shop->id }}" @if($shop->id === $product->shop_id) selected @endif>
                                   {{ $shop->name }}
                                 </option>
@@ -90,6 +93,7 @@
                               </select>
                             </div>
                           </div>
+                          {{-- nullの可能性もあるため、エラーを回避 --}}
                           <x-select-image :images="$images" currentId="{{ $product->image1 }}" currentImage="{{ $product->imageFirst->filename ?? '' }}" name="image1" />
                           <x-select-image :images="$images" currentId="{{ $product->image1 }}" currentImage="{{ $product->imageSecond->filename ?? '' }}" name="image2" />
                           <x-select-image :images="$images" currentId="{{ $product->image1 }}" currentImage="{{ $product->imageThird->filename ?? '' }}" name="image3" />
