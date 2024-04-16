@@ -13,10 +13,10 @@ return [
     'before'               => ':attributeには、:dateより前の日付を指定してください。',
     'before_or_equal'      => ':attributeには、:date以前の日付を指定してください。',
     'between'              => [
-        'array'   => ':attributeの項目は、:min個から:max個にしてください。',
-        'file'    => ':attributeには、:min KBから:max KBまでのサイズのファイルを指定してください。',
-        'numeric' => ':attributeには、:minから、:maxまでの数字を指定してください。',
-        'string'  => ':attributeは、:min文字から:max文字にしてください。',
+        'array'   => ':attributeの項目は、:min個～:max個にしてください。',
+        'file'    => ':attributeには、:min KB～:max KBまでのサイズのファイルを指定してください。',
+        'numeric' => ':attributeには、:min～:maxまでの数字を指定してください。',
+        'string'  => ':attributeは、:min文字～:max文字にしてください。',
     ],
     'boolean'              => ':attributeには、\'true\'か\'false\'を指定してください。',
     'confirmed'            => ':attributeと:attribute確認が一致しません。',
@@ -25,7 +25,7 @@ return [
     'date_format'          => ':attributeの形式は、\':format\'と合いません。',
     'different'            => ':attributeと:otherには、異なるものを指定してください。',
     'digits'               => ':attributeは、:digits桁にしてください。',
-    'digits_between'       => ':attributeは、:min桁から:max桁にしてください。',
+    'digits_between'       => ':attributeは、:min桁～:max桁にしてください。',
     'dimensions'           => ':attributeの画像サイズが無効です',
     'distinct'             => ':attributeの値が重複しています。',
     'email'                => ':attributeは、有効なメールアドレス形式で指定してください。',
@@ -119,6 +119,7 @@ return [
     'attributes'           => [
         'name' => '名前',
         'email' => 'メールアドレス',
-        'password' => 'パスワード'
+        'password' => 'パスワード',
+        'quantity' => '数量'
     ],
 ];

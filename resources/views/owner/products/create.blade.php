@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <x-input-error :messages="$errors->get('image')" class="mb-4" />
+                    <x-input-error :messages="$errors->all()" class="mb-4" />
                     <form method="post" action="{{ route('owner.products.store') }}">
                         @csrf
                         <div class="-m-2">

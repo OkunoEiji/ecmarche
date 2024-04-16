@@ -14,7 +14,7 @@ use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 use Illuminate\Support\Facades\Log;
-use App\Http_Requests\ProductRequest;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -93,7 +93,6 @@ class ProductController extends Controller
                     'information' => $request->information,
                     'price' => $request->price,
                     'sort_order' => $request->sort_order,
-                    'quantity' => $request->quantity,
                     'shop_id' => $request->shop_id,
                     'secondary_category_id' => $request->category,
                     'image1' => $request->image1,
@@ -150,17 +149,56 @@ class ProductController extends Controller
             'current_quantity' => ['required', 'integer'],
         ]);
 
+        // ルートパラメータで使用した商品の在庫をquantityの変数に入れる
         $product = Product::findOrFail($id);
         $quantity = Stock::where('product_id', $product->id)
         ->sum('quantity');
 
         if($request->current_quantity !== $quantity){
+            // リダイレクトをかけるため、ルートパラメータのidを取得する必要がある
             $id = $request->route()->parameter('product');
             return redirect()->route('owner.products.edit', ['product'=>$id])
             ->with(['message' => '在庫数が変更されております。再度、ご確認ください。',
             'status' => 'alert']);
         } else {
-            
+            try {
+                DB::transaction(function () use ($request, $product) {
+                        // 既にある$productの情報を更新
+                        $product->name = $request->name;
+                        $product->information = $request->information;
+                        $product->price = $request->price;
+                        $product->sort_order = $request->sort_order;
+                        $product->shop_id = $request->shop_id;
+                        $product->secondary_category_id = $request->category;
+                        $product->image1 = $request->image1;
+                        $product->image2 = $request->image2;
+                        $product->image3 = $request->image3;
+                        $product->image4 = $request->image4;
+                        $product->is_selling = $request->is_selling;
+                        $product->save(); // createが無いため、save()でデータベースに保存
+
+                    if($request->type === '1'){
+                        $newQuantity = $request->quantity;
+                    }
+                    if($request->type === '2'){
+                        $newQuantity = $request->quantity * -1;
+                    }
+                    Stock::create([ // createを使用することで、データベースに保存できる
+                        'product_id' => $product->id,
+                        'type' => $request->type,
+                        'quantity' => $newQuantity
+                    ]);
+                }, 2);
+            } catch (Throwable $e) {
+                Log::error($e);
+                throw $e;
+            }
+    
+            return redirect()
+                ->route('owner.products.index')
+                ->with(['message' => '商品情報を更新致しました。',
+                'status' => 'info'
+                ]);
         }
     }
 
