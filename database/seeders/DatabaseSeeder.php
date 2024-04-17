@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Product;
+use App\Models\Stock;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,5 +21,8 @@ class DatabaseSeeder extends Seeder
             // StockSeeder::class,
             UserSeeder::class,
         ]);
+        // Productの中でShop、Image、Categoryなどで外部キー制約の設定している関係で、先にSeederの設定がいる。
+        Product::factory(100)->create();
+        Stock::factory(100)->create();
     }
 }
