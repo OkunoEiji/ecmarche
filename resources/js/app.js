@@ -8,3 +8,4 @@ Alpine.start();
 
 import './micromodal';
 import '../css/micromodal.css';
+import './swiper';
