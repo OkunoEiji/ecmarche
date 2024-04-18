@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
 use App\Models\Stock;
+use App\Models\User;
 
 class Product extends Model
 {
@@ -64,5 +65,12 @@ class Product extends Model
     {
         // リレーション1対多(多側)
         return $this->hasMany(Stock::class);
+    }
+
+    public function users()
+    {
+        // リレーション多対多
+        return $this->belongsToMany(Product::class, 'carts')
+        ->withPivot(['id', 'quantity']);
     }
 }
