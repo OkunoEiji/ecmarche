@@ -94,21 +94,19 @@ class CartController extends Controller
             ]);
         }
 
-        dd('test');
-
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
+        
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'], // 支払方法を指定
             'line_items' => [$lineItems], // $lineItemsを定義
             'mode' => 'payment', // 支払モードの選択
-            'success_url' => route('user.cart.index'), // 成功ページroute('user.cart.success'), 
+            'success_url' => route('user.items.index'), // 成功ページroute('user.cart.success'), 
             'cancel_url' => route('user.cart.index'), // キャンセルページroute('user.cart.cancel'), 
         ]);
 
         $publicKey = env('STRIPE_PUBLIC_KEY');
 
         return view('user.checkout', 
-            compact('session', 'publicKey'));
+        compact('session', 'publicKey'));
     }
 }
