@@ -64,9 +64,9 @@ class CartController extends Controller
         $lineItems = [];
         foreach($products as $product){
             $quantity = '';
-            $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+            $quantity = Stock::where('product_id', $product->id)->sum('quantity'); // 現在の在庫数
 
-            if($product->pivot->quantity > $quantity){
+            if($product->pivot->quantity > $quantity){ // カートの数量とストックテーブルより多い場合
                 return redirect()->route('user.cart.index');
             } else {
                 $price_data = ([
@@ -86,7 +86,7 @@ class CartController extends Controller
             }
         }
 
-        foreach($products as $product){
+        foreach($products as $product){ // 決済前に在庫数を減らす
             Stock::create([
                 'product_id' => $product->id,
                 'type' => \Constant::PRODUCT_LIST['reduce'],
@@ -94,13 +94,15 @@ class CartController extends Controller
             ]);
         }
 
+        dd('test');
+
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'], // 支払方法を指定
             'line_items' => [$lineItems], // $lineItemsを定義
             'mode' => 'payment', // 支払モードの選択
-            'success_url' => route('user.items.index'), // 成功ページroute('user.cart.success'), 
+            'success_url' => route('user.cart.index'), // 成功ページroute('user.cart.success'), 
             'cancel_url' => route('user.cart.index'), // キャンセルページroute('user.cart.cancel'), 
         ]);
 
