@@ -100,7 +100,7 @@ class CartController extends Controller
             'payment_method_types' => ['card'], // 支払方法を指定
             'line_items' => [$lineItems], // $lineItemsを定義
             'mode' => 'payment', // 支払モードの選択
-            'success_url' => route('user.items.index'), // 成功ページroute('user.cart.success'), 
+            'success_url' => route('user.cart.success'), // 成功ページ
             'cancel_url' => route('user.cart.index'), // キャンセルページroute('user.cart.cancel'), 
         ]);
 
@@ -108,5 +108,12 @@ class CartController extends Controller
 
         return view('user.checkout', 
         compact('session', 'publicKey'));
+    }
+
+    public function success()
+    {
+        Cart::where('user_id', Auth::id())->delete();
+
+        return redirect()->route('user.items.index');
     }
 }
