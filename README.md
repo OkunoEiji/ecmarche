@@ -2,7 +2,7 @@
 
 git clone
 
-git clone https://github.com/aokitashipro/laravel_umarche.git
+git clone https://github.com/OkunoEiji/ecmarche
 
 git clone ブランチを指定してダウンロードする場合
 
@@ -12,7 +12,7 @@ git clone -b ブランチ名 https://github.com/OkunoEiji/ecmarche
 
 ## インストール方法
 
-- cd laravel_umarche
+- cd marche
 - composer install または composer update
 - npm install
 - npm run dev
@@ -24,9 +24,9 @@ git clone -b ブランチ名 https://github.com/OkunoEiji/ecmarche
 - DB_CONNECTION=mysql
 - DB_HOST=127.0.0.1
 - DB_PORT=3306
-- DB_DATABASE=laravel_umarche
-- DB_USERNAME=umarche
-- DB_PASSWORD=password123
+- DB_DATABASE=marche
+- DB_USERNAME=root
+- DB_PASSWORD=
 
 XAMPP/MAMPまたは他の開発環境でDBを起動した後に
 
