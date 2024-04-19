@@ -9,37 +9,33 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class TestMail extends Mailable
+class ThanksMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct()
+    public $products;
+    public $user;
+
+    public function __construct($products, $user)
     {
-        //
+        $this->products = $products;
+        $this->user = $user;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'テスト送信完了',
+            subject: 'ご購入ありがとうございました。',
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.test',
+            view: 'emails.thanks',
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
